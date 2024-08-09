@@ -14,7 +14,18 @@ router = APIRouter(
 Hashed = hashing.Hash
 ACCESS_TOKEN_EXPIRE_HOUR = 2
 
-@router.post('/login')
+
+#one of the login for testing
+#username: precious@gmail.com
+#password: 12345678
+
+@router.post('/login',
+             summary="Login and generate JWT token",
+             description="Authenticate a user by checking the email and password against the database. If valid, generate and return a JWT access token with an expiration time.",
+             responses={
+                 404: {"description": "Invalid credentials or password"}
+             }
+             )
 #pass in the database and the oauth2request form for the login
 def login(user:Annotated[OAuth2PasswordRequestForm,Depends()],db:Session=Depends(database.get_db)):
     """Get the useremail and password check it in the database and create and return a jwt token and expire time"""
@@ -38,9 +49,7 @@ def login(user:Annotated[OAuth2PasswordRequestForm,Depends()],db:Session=Depends
     return schemas.Token(access_token=access_token,token_type="bearer") #return the access token and the token type
 
 
-#one of the login for testing
-#username: precious@gmail.com
-#password: 12345678
+
 
 
  
